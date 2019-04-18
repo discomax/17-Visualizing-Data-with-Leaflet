@@ -53,7 +53,7 @@ function createFeatures(quakeData) {
   // Use pointToLayer to create a circle marker
   function pointToLayer(feature, latlng) {
     marker =  new L.circleMarker(latlng, circleParams(feature.properties.mag));
-    console.log(marker);
+    //console.log(marker);
     return marker;
   }
   // Create a GeoJSON layer containing the features array on the earthquakeData object
@@ -83,44 +83,38 @@ function createMap(earthquakes) {
     layers: [lightMap, earthquakes]
   });
 
+  // 
+  
   var legend = L.control({position: 'bottomleft'});
   legend.onAdd = function (myMap) {
     var div = L.DomUtil.create("div", "info legend");
-    var limits = features.properties.mag;
-    var colors = limits.forEach(mag2color(limit));
-    console.log(colors);
-
-    // Add min & max
-    var legendInfo = "<h1>Median Income</h1>" +
+    const mags = new Array(1, 2.5, 5, 7.5, 9);
+    const colors = [];
+    
+    for (var i=0; i < mags.length; i++) {
+      var color = mag2color(mags[i]);
+      colors.push(color);
+    }
+   
+    var labels = [];
+    //console.log(colors);
+    var legendInfo = "<h2>Recorded Earthquakes</h2>" +
+      "<h3>Within Past Day</h3>" +
       "<div class=\"labels\">" +
-        "<div class=\"min\">" + limits[0] + "</div>" +
-        "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+        "<div class=\"min-max\"><PRE>1       5        9 </PRE></div>" +
       "</div>";
 
+    // Add legendInfo to the HTML
     div.innerHTML = legendInfo;
 
-    limits.forEach(function(limit, index) {
+    mags.forEach(function(limit, index) {
       labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
     });
-
+    // Add the color scale labels to the HTML
     div.innerHTML += "<ul>" + labels.join("") + "</ul>";
     return div;
   };
 
   // Adding legend to the map
   legend.addTo(myMap);
-  // var div = L.DomUtil.create('div', 'info legend');
-  // labels = ['<h1>Earthquake Magnitude</h1>'],
-  // categories = ['Mag: 1', 'Mag: 2.5','Mag: 5','Mag: 7.5','Mag: 10'];
-  // mags = ['1', '2.5', '5', '7.5', '9']
-  // for (var i = 0; i < categories.length; i++) {
-  //   div.innerHTML += labels.push(
-  //     '<i class="circle" style="background:' + mag2color(mags[i]) + '"></i> ' +
-  //     (categories[i] ? categories[i] : '+'));
-  //   }
-  //       div.innerHTML = labels.join('<br>');
-  //   return div;
-  // };
-  //   legend.addTo(myMap);
-
 }
