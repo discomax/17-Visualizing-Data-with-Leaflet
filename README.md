@@ -65,7 +65,3 @@ Your final product will be assessed on the following metrics:
 * Professionalism
 
 **Good luck!**
-
-## Copyright
-
-Data Boot Camp (C) 2018. All Rights Reserved.
